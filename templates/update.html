@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block head %}
+<h1 style="text-align: center">Accounting System</h1>
+{% endblock %} {% block body %}
+
+<div class="content">
+  <h1 style="text-align: center">Update Order</h1>
+  <div class="form">
+    <form action="/update/{{order.id}}" method="POST">
+      <input
+        type="text"
+        name="customer_name"
+        id="customer_name"
+        value="{{order.customer_name}}"
+      />
+      <input
+        type="text"
+        name="order_items"
+        id="order_items"
+        value="{{order.order_items}}"
+      />
+      <input
+        type="date"
+        name="order_date"
+        id="order_date"
+        value="{{order.order_date}}"
+      />
+
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
+
+{% endblock %}
