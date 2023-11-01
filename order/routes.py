@@ -1,43 +1,8 @@
-from flask import Flask, render_template, url_for, request, redirect, session
-from flask_sqlalchemy import SQLAlchemy
-# from database.order_model import Order
-# from database import *
+from flask import render_template, url_for, request, redirect, session
 from datetime import datetime
+from order.models import Order
+from order import app, db
 
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-
-db = SQLAlchemy(app)
-
-
-# """"
-class Order(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    customer_name = db.Column(db.String(200), nullable=True)
-    order_items = db.Column(db.String(200), nullable=True)
-    order_date = db.Column(db.String(200), nullable=False, default=datetime.utcnow().strftime('%Y-%m-%d'))
-    # order_date = db.Column(db.DateTime, default=datetime.utcnow)
-    
-
-    def __repr__(self):
-        return '<Order %r>' % self.id
-# """
-
-
-
-
-def database_existance_check():
-    """Check if database exists. If not, create it."""
-    # from app import app, db
-    import os
-
-    if not os.path.exists('./instance/test.db'):
-        print('Database does not exist. Creating database...')
-        app.app_context().push()
-        db.create_all()
-    else:
-        print('Database exists.')
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
@@ -103,9 +68,3 @@ def search():
 
     return render_template('search.html', orders = orders)
         
-
-if __name__ == '__main__':
-    
-    database_existance_check()
-
-    app.run(debug=True)
