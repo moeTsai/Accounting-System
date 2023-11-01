@@ -1,39 +1,30 @@
 {% extends 'base.html' %} {% block head %}
 <h1 style="text-align: center">Accounting System</h1>
 {% endblock %} {% block body %}
-<div class="form">
-  <form class="d-flex" role="search" method="POST" action="/">
-    <input
-      class="form-control me-2"
-      type="text"
-      placeholder="客戶"
-      aria-label="form"
-      name="customer_name"
-    />
-    <input
-      class="form-control me-2"
-      type="text"
-      placeholder="品項"
-      aria-label="form"
-      name="order_items"
-    />
-    <input
-      class="form-control me-2"
-      type="date"
-      placeholder="日期"
-      aria-label="form"
-      name="order_date"
-    />
-    <button class="btn btn-outline-success" type="submit">Add</button>
-  </form>
-  <!-- <form action="/" method="POST">
-    <input type="text" name="customer_name" id="customer_name" />
-    <input type="text" name="order_items" id="order_items" />
-    <input type="date" name="order_date" id="order_date" />
-
-    <input type="submit" value="Submit" />
-  </form> -->
-</div>
+<form class="d-flex" role="search" method="POST" action="/">
+  <input
+    class="form-control me-2"
+    type="text"
+    placeholder="客戶"
+    aria-label="form"
+    name="customer_name"
+  />
+  <input
+    class="form-control me-2"
+    type="text"
+    placeholder="品項"
+    aria-label="form"
+    name="order_items"
+  />
+  <input
+    class="form-control me-2"
+    type="date"
+    placeholder="日期"
+    aria-label="form"
+    name="order_date"
+  />
+  <button class="btn btn-outline-success" type="submit">Add</button>
+</form>
 <div class="content">
   <table class="table table-hover table-dark">
     <thead>
@@ -66,6 +57,7 @@
     </tbody>
     {% endfor %}
   </table>
+  <div class="form"></div>
 </div>
 
 {% endblock %}

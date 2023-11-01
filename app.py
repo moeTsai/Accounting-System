@@ -1,7 +1,7 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 # from database.order_model import Order
-from database import *
+# from database import *
 from datetime import datetime
 
 
@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
 db = SQLAlchemy(app)
+
 
 # """"
 class Order(db.Model):
@@ -57,7 +58,7 @@ def index():
             print(f"An error occurred: {e}")
             return 'There was an issue adding your order'
     else:
-        orders = Order.query.order_by(Order.customer_name).all()
+        orders = Order.query.order_by(Order.order_date).all()
         return render_template('index.html', orders = orders)
     
 @app.route('/delete/<int:id>')
@@ -83,16 +84,25 @@ def update(id):
 
         try:
             db.session.commit()
+            # print(request.rederrer)
             return redirect('/')
         except:
             return 'There was an issue updating your order'
 
-        pass
     else:
         return render_template('update.html', order = order)
     
+@app.route('/search', methods=['POST'])
+def search():
+    
+    q = request.form.get('search_query')
+    if q:
+        orders = Order.query.filter(Order.customer_name.icontains(q)).order_by(Order.order_date).all()
+    else:
+        orders = Order.query.order_by(Order.order_date).all()
 
-
+    return render_template('search.html', orders = orders)
+        
 
 if __name__ == '__main__':
     
