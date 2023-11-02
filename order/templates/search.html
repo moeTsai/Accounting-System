@@ -38,10 +38,10 @@
     {% for order in orders %}
     <tbody>
       <tr>
-        <td>{{ order.customer_name }}</td>
-        <td>{{ order.order_items }}</td>
+        <td>{{ order.customer }}</td>
+        <td>{{ order.items }}</td>
 
-        <td>{{ order.order_date }}</td>
+        <td>{{ order.date }}</td>
 
         <td colspan="4">
           <table class="table mb-0">
