@@ -1,58 +1,48 @@
 from flask import render_template, url_for, request, redirect, session
+from sqlalchemy import desc
 from datetime import datetime
 from order.models import Order
 from order import app, db
 from order.services import *
 
 
-"""
 @app.route('/', methods = ['POST', 'GET'])
 def index():
     # print(request.method)
     if request.method == 'POST':
         # new_order = Order(customer_name=request.form['customer_name'], order_items=request.form['order_items'], order_date=request.form['order_date'])
+        
         customer = request.form['customer_name'] 
         items = request.form['order_items']
+        num_items = request.form['items_number']
         date = request.form['order_date'] if request.form['order_date'] else datetime.utcnow().strftime('%Y-%m-%d')
         
         orders = order_precess(items)
-
-        try:
-            for order in orders:
-                pass
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            return 'There was an issue adding your order'
-    else:
-        orders = Order.query.order_by(Order.date).all()
-        return render_template('index.html', orders = orders)
-"""
-
-
-@app.route('/', methods = ['POST', 'GET'])
-def index():
-    # print(request.method)
-    if request.method == 'POST':
-        # new_order = Order(customer_name=request.form['customer_name'], order_items=request.form['order_items'], order_date=request.form['order_date'])
-        customer = request.form['customer_name'] 
-        items = request.form['order_items']
-        date = request.form['order_date'] if request.form['order_date'] else datetime.utcnow().strftime('%Y-%m-%d')
+        print(f'items = {items}')
+        print(f'num_items = {num_items}')
         
+        len1 = len(items.strip().split(','))
+        len2 = len(num_items.strip().split('.'))
+        print(len1, len2)
 
-
-        new_order = Order(customer=customer, items=items, date=date)
-        print(new_order.customer, new_order.items, new_order.date)
-        
+        # new_order = Order(customer=customer, items=items, date=date)
+        # print(new_order.customer, new_order.items, new_order.date)
         try:
+            if len1 != len2:
+                raise Exception('Number of items not match')
+            new_order = Order(customer=customer, item=items, num_item=num_items, date=date)
             db.session.add(new_order)
             db.session.commit()
+            # db.session.add(new_order)
+            # db.session.commit()
             return redirect('/')
         except Exception as e:
             print(f"An error occurred: {e}")
             return 'There was an issue adding your order'
     else:
-        orders = Order.query.order_by(Order.date).all()
+        orders = Order.query.order_by(desc(Order.date)).all()
         return render_template('index.html', orders = orders)
+
     
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -71,8 +61,9 @@ def update(id):
 
     if request.method == 'POST':
         order.customer = request.form['customer_name']
-        order.items = request.form['order_items']
-        print(request.form['order_date'])
+        order.item = request.form['order_item']
+        order.num_item = request.form['items_number']
+        # print(request.form['order_date'])
         order.date = request.form['order_date']
 
         try:
@@ -90,7 +81,7 @@ def search():
     
     q = request.form.get('search_query')
     if q:
-        orders = Order.query.filter(Order.customer.icontains(q)).order_by(Order.date).all()
+        orders = Order.query.filter(Order.customer.icontains(q) | Order.date.icontains(q)).order_by(Order.date).all()
     else:
         orders = Order.query.order_by(Order.date).all()
 

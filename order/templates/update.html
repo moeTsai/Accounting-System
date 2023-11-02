@@ -13,7 +13,7 @@
       <input
         class="form-control me-2"
         type="text"
-        placeholder="客戶"
+        placeholder="買家"
         name="customer_name"
         id="customer_name"
         value="{{order.customer}}"
@@ -22,9 +22,17 @@
         class="form-control me-2"
         type="text"
         placeholder="品項"
-        name="order_items"
-        id="order_items"
-        value="{{order.items}}"
+        name="order_item"
+        id="order_item"
+        value="{{order.item}}"
+      />
+      <input
+        class="form-control me-2"
+        type="text"
+        placeholder="數量"
+        name="items_number"
+        id="order_number_item"
+        value="{{order.num_item}}"
       />
       <input
         class="form-control me-2"

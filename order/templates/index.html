@@ -67,9 +67,9 @@
           ];
 
           $("#secondDropdown").empty();
-
           if (selectedOption > 0) {
             console.log("Selected option: " + selectedOption);
+            $("#secondDropdown").append(new Option("選擇客戶"));
             for (option in company_week[selectedOption]) {
               $("#secondDropdown").append(
                 new Option(company_week[selectedOption][option])
@@ -107,6 +107,7 @@
     >
       <!-- Options will be added here dynamically -->
     </select>
+
     <script>
       const company_items = {
         華達士: ["1.5V,4V", 155, 400],
@@ -166,6 +167,8 @@
           }
 
           $("#myText").text(company_items[selectedOption][0]);
+          document.getElementById("hiddenInput").value =
+            company_items[selectedOption][0];
         });
       });
     </script>
@@ -186,12 +189,15 @@
       }
     </style>
     <div class="vertical-align" id="myText"></div>
+
+    <input type="hidden" id="hiddenInput" name="order_items" />
+
     <input
       class="form-control me-2"
       type="text"
-      placeholder="品項"
+      placeholder="各品項數量"
       aria-label="form"
-      name="order_items"
+      name="items_number"
     />
     <input
       class="form-control me-2"
@@ -208,9 +214,10 @@
   <table class="table table-hover table-dark">
     <thead>
       <tr>
-        <th>Order</th>
-        <th>Added</th>
-        <th>Actions</th>
+        <th>買家</th>
+        <th>品項</th>
+        <th>數量</th>
+        <th>日期</th>
       </tr>
     </thead>
 
@@ -218,7 +225,8 @@
     <tbody>
       <tr>
         <td>{{ order.customer }}</td>
-        <td>{{ order.items }}</td>
+        <td>{{ order.item }}</td>
+        <td>{{ order.num_item }}</td>
         <td>{{ order.date }}</td>
 
         <td colspan="4">
