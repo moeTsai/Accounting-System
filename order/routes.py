@@ -17,6 +17,13 @@ def index():
         num_items = request.form['items_number']
         date = request.form['order_date'] if request.form['order_date'] else datetime.utcnow().strftime('%Y-%m-%d')
         
+        session['form_data'] = {
+            'customer': customer,
+            'items': items,
+            'num_items': num_items,
+            'date': date
+        }
+
         orders = order_precess(items)
         print(f'items = {items}')
         print(f'num_items = {num_items}')
@@ -41,7 +48,13 @@ def index():
             return 'There was an issue adding your order'
     else:
         orders = Order.query.order_by(desc(Order.date)).all()
-        return render_template('index.html', orders = orders)
+        form_data = session.get('form_data', {
+            'customer': '',
+            'items': '',
+            'num_items': '',
+            'date': ''
+        })
+        return render_template('index.html', orders = orders, form_data=form_data)
 
     
 @app.route('/delete/<int:id>')
