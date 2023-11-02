@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% block head %}
-<h1 style="text-align: center">首頁</h1>
+<h1 style="text-align: center">結帳</h1>
 {% endblock %} {% block body %}
 
 <div class="form">
-  <form class="d-flex" role="search" method="POST" action="/">
+  <form class="d-flex" role="search" method="POST" action="/bill_summary">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
@@ -173,16 +173,9 @@
 
     <input
       class="form-control me-2"
-      type="text"
-      placeholder="各品項數量"
-      aria-label="form"
-      name="items_number"
-    />
-    <input
-      class="form-control me-2"
       type="date"
       placeholder="日期"
-      value="{{ form_data.date }}"
+      value=""
       aria-label="form"
       name="order_date"
     />
@@ -191,6 +184,7 @@
 </div>
 
 <div class="content">
+  <h2>{{ orders }}</h2>
   <table class="table table-hover table-dark">
     <thead>
       <tr>
@@ -224,5 +218,33 @@
     {% endfor %}
   </table>
 </div>
-
 {% endblock %}
+<script>
+  $(document).ready(function () {
+    $("form").submit(function (event) {
+      event.preventDefault(); // prevent the form from submitting normally
+
+      // get the form data
+      var formData = {
+        customer_name: $("select[name=customer_name]").val(),
+        order_items: $("input[name=order_items]").val(),
+        order_date: $("input[name=order_date]").val(),
+      };
+
+      // send the POST request
+      $.ajax({
+        type: "POST",
+        url: "/bill_summary.html",
+        data: formData,
+        success: function (response) {
+          // handle the response from the server
+          console.log(response);
+        },
+        error: function (xhr, status, error) {
+          // handle errors
+          console.log(xhr.responseText);
+        },
+      });
+    });
+  });
+</script>

@@ -5,10 +5,31 @@ from order.models import Order
 from order import app, db
 from order.services import *
 
+@app.route('/bill_summary', methods=['GET', 'POST'])
+def bill_summary():
+    # session['previous_page'] = request.referrer
+    
+    if request.method == 'POST':
+        customer = request.form['customer_name']
+        items = request.form['order_items']
+        date = request.form['order_date']
+        orders = Order.query.filter( Order.customer.icontains(customer) & Order.date.icontains(date)).order_by(Order.date).all()
+
+        summary = bill_overview(orders)
+        print(orders)
+    else:
+        orders = Order.query.order_by(Order.date).all()
+    
+    return render_template('bill_summary.html', orders = orders)    
+
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
     # print(request.method)
+    # session['previous_page'] = request.referrer
+    
+    # print(session['previous_page'])
+
     if request.method == 'POST':
         # new_order = Order(customer_name=request.form['customer_name'], order_items=request.form['order_items'], order_date=request.form['order_date'])
         
@@ -30,7 +51,7 @@ def index():
         
         len1 = len(items.strip().split(','))
         len2 = len(num_items.strip().split('.'))
-        print(len1, len2)
+        print(len1, len2) 
 
         # new_order = Order(customer=customer, items=items, date=date)
         # print(new_order.customer, new_order.items, new_order.date)
@@ -56,7 +77,7 @@ def index():
         })
         return render_template('index.html', orders = orders, form_data=form_data)
 
-    
+
 @app.route('/delete/<int:id>')
 def delete(id):
     order_to_delete = Order.query.get_or_404(id)
@@ -64,7 +85,8 @@ def delete(id):
     try:
         db.session.delete(order_to_delete)
         db.session.commit()
-        return redirect('/')
+        previous_page = session.get('previous_page', '/')
+        return redirect(previous_page)
     except:
         return 'There was a problem deleting that order'
 
@@ -78,21 +100,28 @@ def update(id):
         order.num_item = request.form['items_number']
         # print(request.form['order_date'])
         order.date = request.form['order_date']
-
+        # previous_page = session.get('previous_page')
         try:
             db.session.commit()
-            # print(request.rederrer)
-            return redirect('/')
+            previous_page = session.get('previous_page', '/')
+            return redirect(previous_page)
         except:
             return 'There was an issue updating your order'
 
     else:
+        session['previous_page'] = request.referrer
         return render_template('update.html', order = order)
     
-@app.route('/search', methods=['POST'])
-def search():
+
     
+@app.route('/search', methods=['POST', 'GET'])
+def search():
     q = request.form.get('search_query')
+    if not q:
+        q = session['q']
+    
+    session['q'] = q
+
     if q:
         orders = Order.query.filter(Order.customer.icontains(q) | Order.date.icontains(q)).order_by(Order.date).all()
     else:

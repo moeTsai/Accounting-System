@@ -17,7 +17,7 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand text-white" href="#">Navbar</a>
+        <a class="navbar-brand text-white" href="#">馥記</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -36,12 +36,17 @@
                 class="nav-link active text-white"
                 aria-current="page"
                 href="{{ url_for('index') }}"
-                >Home</a
+                >首頁</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="#">Link</a>
+              <a
+                class="nav-link active text-white"
+                href="{{ url_for('bill_summary') }}"
+                >結帳</a
+              >
             </li>
+
             <li class="nav-item dropdown text-white">
               <a
                 class="nav-link dropdown-toggle text-white"
