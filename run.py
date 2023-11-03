@@ -7,7 +7,7 @@ def database_existance_check():
     # from app import app, db
     import os
     
-    if not os.path.exists('./instance/test.db'):
+    if not os.path.exists('./instance/bill.db'):
         print('Database does not exist. Creating database...')
         app.app_context().push()
         db.create_all()
