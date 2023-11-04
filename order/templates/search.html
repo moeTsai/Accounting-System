@@ -84,65 +84,76 @@
     >
       <!-- Options will be added here dynamically -->
     </select>
+
     <script>
       const company_items = {
-        華達士: ["1.5V,4V", 155, 400],
-        弘揚: ["V,苔,A,芝", 400, 400, 375, 375],
-        三乃: ["1.5V,大排,2A,2A苔", 155, 165, 160, 170],
-        超品: ["V,2A,排,豆,起(12)", 400, 165, 175, 85, 255],
-        新城: ["V", 450],
-        美琳: ["排,牛排", 175, 225],
-        洲河: ["V", 420],
-        山河: ["V", 420],
-        龍河: ["V", 420],
-        神河: ["V", 420],
-        鼎香: ["V", 450],
-        亞美橋山: ["V,排,培,哈", 440, 90, 235, 240],
-        楊溢: ["V,排,培,哈", 440, 90, 235, 240],
-        和達人五: ["V,小排,培,哈,起", 420, 90, 235, 240, 260],
-        汀州路五: ["V,小排,培,哈,起", 420, 90, 235, 240, 260],
-        瑞安街五: ["V,小排,培,起", 420, 90, 235, 260],
-        和達人二: ["V,小排,培,哈,起", 420, 90, 255, 240, 260],
-        汀州路二: ["V,小排,培,哈,起", 420, 90, 255, 240, 260],
-        瑞安街二: ["V,小排,培,起", 420, 90, 255, 260],
-        來可: ["V", 450],
-        桃鶯: ["V(箱),豆", 2700, 90],
-        春日: ["V(箱),豆", 2700, 90],
-        大興: ["V(箱),豆", 2700, 90],
-        筱芸南平: ["V", 450],
-        北大昇輝: ["V,豆", 450, 90],
-        昇輝寶慶: ["V,豆", 450, 90],
-        桃園寶慶: ["V,豆", 480, 90],
-        百成一店: ["V(箱),豆", 2700, 90],
-        北聖: ["V,豆", 450, 90],
-        筱芸中正: ["V", 450],
-        大園果林: ["V(箱),豆", 2700, 90],
-        云盛: ["V,排,培,哈", 450, 90, 245, 240],
-        北大文化二路: ["V,豆", 450, 90],
-        林口仁愛: ["V,豆", 450, 90],
-        北大文化三路: ["V,豆", 450, 90],
-        龍鳳: ["5V,排,4V", 500, 175, 400],
-        深溪: ["V,豆", 450, 90],
-        仁樂: ["V,豆", 450, 90],
-        珍好味: ["V,豆", 450, 90],
-        新豐: ["V,豆", 450, 90],
-        福德: ["V,豆", 450, 90],
-        筱芸中壢: ["V", 450],
+        華達士: ["1.5V,4V"],
+        弘揚: ["V,苔,A,芝"],
+        三乃: ["1.5V,大排,2A,2A苔"],
+        超品: ["V,2A,排,豆,起(12)"],
+        新城: ["V"],
+        美琳: ["排,牛排"],
+        洲河: ["V"],
+        山河: ["V"],
+        龍河: ["V"],
+        神河: ["V"],
+        鼎香: ["V"],
+        亞美橋山: ["V,排,培,哈"],
+        楊溢: ["V,排,培,哈"],
+        和達人五: ["V,小排,培,哈,起"],
+        汀州路五: ["V,小排,培,哈,起"],
+        瑞安街五: ["V,小排,培,起"],
+        和達人二: ["V,小排,培,哈,起"],
+        汀州路二: ["V,小排,培,哈,起"],
+        瑞安街二: ["V,小排,培,起"],
+        來可: ["V"],
+        桃鶯: ["V(箱),豆"],
+        春日: ["V(箱),豆"],
+        大興: ["V(箱),豆"],
+        筱芸南平: ["V"],
+        北大昇輝: ["V,豆"],
+        昇輝寶慶: ["V,豆"],
+        桃園寶慶: ["V,豆"],
+        百成一店: ["V(箱),豆"],
+        北聖: ["V,豆"],
+        筱芸中正: ["V"],
+        大園果林: ["V(箱),豆"],
+        云盛: ["V,排,培,哈"],
+        北大文化二路: ["V,豆"],
+        林口仁愛: ["V,豆"],
+        北大文化三路: ["V,豆"],
+        龍鳳: ["5V,排,4V"],
+        深溪: ["V,豆"],
+        仁樂: ["V,豆"],
+        珍好味: ["V,豆"],
+        新豐: ["V,豆"],
+        福德: ["V,豆"],
+        筱芸中壢: ["V"],
       };
       $(document).ready(function () {
         $("#secondDropdown").change(function () {
           var selectedOption = $(this).val();
           console.log("Selected option: " + selectedOption);
 
-          // Find the maximum length among all arrays
-          let maxLength = 0;
-          for (let key in company_items) {
-            if (company_items[key].length > maxLength) {
-              maxLength = company_items[key].length;
-            }
-          }
+          // Split the selected option's value into an array
+          const items = company_items[selectedOption][0].split(",");
 
-          $("#myText").text(company_items[selectedOption][0]);
+          // Clear any existing buttons
+          $("#buttonContainer").empty();
+
+          // Create a container for the buttons with a horizontal scrollbar
+          const buttonContainer = document.createElement("div");
+          buttonContainer.className = "button-container";
+          $("#buttonContainer").append(buttonContainer);
+
+          // Create a button for each item in the array
+          for (const item of items) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "btn btn-info horizontal-button"; // Add a custom class
+            button.textContent = item;
+            buttonContainer.appendChild(button);
+          }
           document.getElementById("hiddenInput").value =
             company_items[selectedOption][0];
         });
@@ -152,22 +163,29 @@
       .short-dropdown {
         width: 20%;
       }
-    </style>
-
-    <!-- <p id="myText"></p> -->
-
-    <style>
-      .vertical-align {
-        display: inline-block;
-        font-size: 20px;
-        width: 1000px;
-        height: 20px;
+      .button-container {
+        display: flex; /* Use a flex container for horizontal alignment */
+        overflow-x: auto; /* Add horizontal scrollbar when buttons overflow */
+        width: 300px;
+        max-width: 300px;
+        white-space: nowrap; /* Prevent wrapping */
+      }
+      .horizontal-button {
+        margin-right: 1px; /* Add some space between buttons */
       }
     </style>
-    <div class="vertical-align" id="myText"></div>
-
     <input type="hidden" id="hiddenInput" name="order_items" />
 
+    <!-- invisible text that spare the space while the script not being called -->
+    <div id="buttonContainer">
+      <button type="text" class="null">&nbsp</button>
+    </div>
+    <style>
+      .null {
+        visibility: hidden;
+        width: 300px;
+      }
+    </style>
     <input
       class="form-control me-2"
       type="text"
@@ -193,6 +211,7 @@
         <th>品項</th>
         <th>數量</th>
         <th>日期</th>
+        <th>編號</th>
       </tr>
     </thead>
 
@@ -203,6 +222,7 @@
         <td>{{ order.item }}</td>
         <td>{{ order.num_item }}</td>
         <td>{{ order.date }}</td>
+        <td>{{ order.id }}</td>
 
         <td colspan="4">
           <table class="table mb-0">
