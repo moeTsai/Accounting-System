@@ -66,9 +66,10 @@ def bill_overview(orders):
         print(f'price = {company_price}')
         print(f'num_items = {num_items}')
         print(f'cur sum = {cur_sum}')
-
-    summaries[len(orders) - 1].append(Summary(id=" " ,customer=" ", item=" ", num=" ", price=" ", cur_sum=" "))
-    summaries[len(orders) - 1].append(Summary(id="總和" ,customer="-", item="-", num="-", price="-", cur_sum=total_sum))
+        
+    if len(orders) > 0:
+        summaries[len(orders) - 1].append(Summary(id=" " ,customer=" ", item=" ", num=" ", price=" ", cur_sum=" "))
+        summaries[len(orders) - 1].append(Summary(id="總和" ,customer="-", item="-", num="-", price="-", cur_sum=total_sum))
     return summaries
 
 def order_precess(unplitted):
