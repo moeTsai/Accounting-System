@@ -13,11 +13,10 @@ pip install flask flask-sqlalchemy
 
 ```
 
+```
 # in the virtual env
 
-```
-
-- python
+python
 ```
 
 ```
