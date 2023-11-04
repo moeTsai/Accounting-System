@@ -54,6 +54,7 @@ def bill_overview(orders):
         num_items = order.num_item.split('.')
         company_price = prices[order.customer][1:]
         cur_sum = 0
+        cur_row = []
         for price, item, num in zip(company_price, items, num_items):
             price_x_num = price * int(num)
             cur_row.append(Summary(id=order.id ,customer=order.customer, item=item, num=num, price=price, cur_sum=price_x_num))
