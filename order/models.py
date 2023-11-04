@@ -11,3 +11,13 @@ class Order(db.Model):
     date = db.Column(db.String(200), nullable=False, default=datetime.utcnow().strftime('%Y-%m-%d-%H-%M-%S'))
     # order_date = db.Column(db.DateTime, default=datetime.utcnow)
     
+    
+class Summary:
+    def __init__(self, id, customer, item, num, price, cur_sum):
+        self.id = id
+        self.customer = customer
+        self.item = item
+        self.num = num
+        self.price = price
+        self.cur_sum = cur_sum
+        

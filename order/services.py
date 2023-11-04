@@ -1,34 +1,6 @@
 
+from order.models import Summary
 
-
-# company_day = [
-#     [],
-#     ['老四川', '麥當勞'],
-#     ['肯德基', '胖老爹'],
-#     ['逐間', '葉問', '茶六'],
-#     ['隨便', 'nupasta', '麵屋武藏', '麵屋壹番'],
-#     ['麵屋壹番', '麵屋武藏'],
-#     [],
-#     []
-# ]
-
-# company_items = {
-#     '老四川': ['牛肉', '牛肉麵', '豬肉', '羊肉'],
-#     '麥當勞': ['麥克雞塊', '麥香雞', '統一', '麥克雞塊'],
-#     '肯德基': ['雞腿', '雞腿飯', '雞腿便當'],
-#     '胖老爹': ['雞腿', '雞腿飯', '雞腿便當'],
-#     '逐間': ['牛肉', '牛肉麵', '豬肉', '羊肉'],
-# }
-
-# items_price = {
-#     '牛肉': 80,
-#     '牛肉麵': 100,
-#     '豬肉': 70,
-#     '羊肉': 90,
-#     '麥克雞塊': 50,
-#     '麥香雞': 60,
-#     '雞腿便當': 40
-# }
 
 prices = {
     '華達士': ['1.5V,4V', 155, 400], 
@@ -75,27 +47,29 @@ prices = {
 }
 
 def bill_overview(orders):
-    sum = 0
+    total_sum = 0
+    summaries = []
     for order in orders:
-        # items = order.item.split(',')
+        items = order.item.split(',')
         num_items = order.num_item.split('.')
         company_price = prices[order.customer][1:]
-
-        # print(company_price, order.num_item[i])
-        for price, num in zip(company_price, num_items):
-            sum += price * int(num)
+        cur_sum = 0
+        for price, item, num in zip(company_price, items, num_items):
+            price_x_num = price * int(num)
+            cur_row.append(Summary(id=order.id ,customer=order.customer, item=item, num=num, price=price, cur_sum=price_x_num))
+            cur_sum += price * int(num)
+        cur_row.append(Summary(id="total" ,customer=order.customer, item="-", num="-", price="-", cur_sum=cur_sum))
+        total_sum += cur_sum
+        summaries.append(cur_row)
+        print(f'items = {items}')
         print(f'price = {company_price}')
         print(f'num_items = {num_items}')
-        print(f'cur sum = {sum}')
+        print(f'cur sum = {cur_sum}')
 
-        # price[order.customer]
-        # print(order.customer, order.item, order.num_item, order.date)
-        # print(order.customer, order.items, order.date)
-
-    return orders
-    pass
+    summaries[len(orders) - 1].append(Summary(id=" " ,customer=" ", item=" ", num=" ", price=" ", cur_sum=" "))
+    summaries[len(orders) - 1].append(Summary(id="總和" ,customer="-", item="-", num="-", price="-", cur_sum=total_sum))
+    return summaries
 
 def order_precess(unplitted):
-    # data form '1,2,3,4,5,6,7,0,2,0'
     unplitted = unplitted.strip().split(',')
     return unplitted

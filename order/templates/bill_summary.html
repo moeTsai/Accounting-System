@@ -1,250 +1,283 @@
 {% extends 'base.html' %} {% block head %}
 <h1 style="text-align: center">結帳</h1>
 {% endblock %} {% block body %}
+<head>
+  <div class="form">
+    <form class="d-flex" role="search" method="POST" action="/bill_summary">
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div class="form">
-  <form class="d-flex" role="search" method="POST" action="/bill_summary">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        $(document).ready(function () {
+          $("#weekdays").change(function () {
+            var selectedOption = $(this).val();
 
-    <script>
-      $(document).ready(function () {
-        $("#weekdays").change(function () {
-          var selectedOption = $(this).val();
+            const company_week = [
+              [],
+              ["華達士", "弘揚", "三乃"],
+              ["和達人二", "汀州路二", "瑞安街二", "來可"],
+              ["超品", "新城", "美琳"],
+              ["云盛", "北大文化二路", "林口仁愛"],
+              [
+                "橋山",
+                "楊溢",
+                "和達人五",
+                "汀州路五",
+                "瑞安街五",
+                "北大文化三路",
+                "龍鳳",
+              ],
+              [
+                "桃鶯",
+                "春日",
+                "大興",
+                ,
+                "筱芸南平",
+                "北大昇輝",
+                "昇輝寶慶",
+                "桃園寶慶",
+                "百成一店",
+                ,
+                "北聖",
+                ,
+                "筱芸中正",
+                "大園果林",
+              ],
+              ["深溪", "仁樂", "珍好味", "新豐", "福德", "筱芸中壢"],
+            ];
 
-          const company_week = [
-            [],
-            ["華達士", "弘揚", "三乃"],
-            ["和達人二", "汀州路二", "瑞安街二", "來可"],
-            ["超品", "新城", "美琳"],
-            ["云盛", "北大文化二路", "林口仁愛"],
-            [
-              "橋山",
-              "楊溢",
-              "和達人五",
-              "汀州路五",
-              "瑞安街五",
-              "北大文化三路",
-              "龍鳳",
-            ],
-            [
-              "桃鶯",
-              "春日",
-              "大興",
-              ,
-              "筱芸南平",
-              "北大昇輝",
-              "昇輝寶慶",
-              "桃園寶慶",
-              "百成一店",
-              ,
-              "北聖",
-              ,
-              "筱芸中正",
-              "大園果林",
-            ],
-            ["深溪", "仁樂", "珍好味", "新豐", "福德", "筱芸中壢"],
-          ];
+            $("#secondDropdown").empty();
+            if (selectedOption > 0) {
+              console.log("Selected option: " + selectedOption);
+              $("#secondDropdown").append(new Option("選擇客戶"));
+              for (option in company_week[selectedOption]) {
+                $("#secondDropdown").append(
+                  new Option(company_week[selectedOption][option])
+                );
+              }
+            } else {
+              console.log("Option not found");
+            }
+          });
+        });
+      </script>
 
-          $("#secondDropdown").empty();
-          if (selectedOption > 0) {
+      <select
+        id="weekdays"
+        class="form-select mb-1 short-dropdown"
+        aria-label="Default select example"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <option selected value="0">選擇星期</option>
+        <option value="1">星期一</option>
+        <option value="2">星期二</option>
+        <option value="3">星期三</option>
+        <option value="4">星期四</option>
+        <option value="5">星期五</option>
+        <option value="6">星期六</option>
+        <option value="7">寄貨</option>
+      </select>
+
+      <select
+        id="secondDropdown"
+        class="form-select mb-1 short-dropdown"
+        aria-label="form"
+        name="customer_name"
+      >
+        <!-- Options will be added here dynamically -->
+      </select>
+
+      <script>
+        const company_items = {
+          華達士: ["1.5V,4V", 155, 400],
+          弘揚: ["V,苔,A,芝", 400, 400, 375, 375],
+          三乃: ["1.5V,大排,2A,2A苔", 155, 165, 160, 170],
+          超品: ["V,2A,排,豆,起(12)", 400, 165, 175, 85, 255],
+          新城: ["V", 450],
+          美琳: ["排,牛排", 175, 225],
+          洲河: ["V", 420],
+          山河: ["V", 420],
+          龍河: ["V", 420],
+          神河: ["V", 420],
+          鼎香: ["V", 450],
+          亞美橋山: ["V,排,培,哈", 440, 90, 235, 240],
+          楊溢: ["V,排,培,哈", 440, 90, 235, 240],
+          和達人五: ["V,小排,培,哈,起", 420, 90, 235, 240, 260],
+          汀州路五: ["V,小排,培,哈,起", 420, 90, 235, 240, 260],
+          瑞安街五: ["V,小排,培,起", 420, 90, 235, 260],
+          和達人二: ["V,小排,培,哈,起", 420, 90, 255, 240, 260],
+          汀州路二: ["V,小排,培,哈,起", 420, 90, 255, 240, 260],
+          瑞安街二: ["V,小排,培,起", 420, 90, 255, 260],
+          來可: ["V", 450],
+          桃鶯: ["V(箱),豆", 2700, 90],
+          春日: ["V(箱),豆", 2700, 90],
+          大興: ["V(箱),豆", 2700, 90],
+          筱芸南平: ["V", 450],
+          北大昇輝: ["V,豆", 450, 90],
+          昇輝寶慶: ["V,豆", 450, 90],
+          桃園寶慶: ["V,豆", 480, 90],
+          百成一店: ["V(箱),豆", 2700, 90],
+          北聖: ["V,豆", 450, 90],
+          筱芸中正: ["V", 450],
+          大園果林: ["V(箱),豆", 2700, 90],
+          云盛: ["V,排,培,哈", 450, 90, 245, 240],
+          北大文化二路: ["V,豆", 450, 90],
+          林口仁愛: ["V,豆", 450, 90],
+          北大文化三路: ["V,豆", 450, 90],
+          龍鳳: ["5V,排,4V", 500, 175, 400],
+          深溪: ["V,豆", 450, 90],
+          仁樂: ["V,豆", 450, 90],
+          珍好味: ["V,豆", 450, 90],
+          新豐: ["V,豆", 450, 90],
+          福德: ["V,豆", 450, 90],
+          筱芸中壢: ["V", 450],
+        };
+        $(document).ready(function () {
+          $("#secondDropdown").change(function () {
+            var selectedOption = $(this).val();
             console.log("Selected option: " + selectedOption);
-            $("#secondDropdown").append(new Option("選擇客戶"));
-            for (option in company_week[selectedOption]) {
-              $("#secondDropdown").append(
-                new Option(company_week[selectedOption][option])
-              );
+
+            // Find the maximum length among all arrays
+            let maxLength = 0;
+            for (let key in company_items) {
+              if (company_items[key].length > maxLength) {
+                maxLength = company_items[key].length;
+              }
             }
-          } else {
-            console.log("Option not found");
-          }
+
+            $("#myText").text(company_items[selectedOption][0]);
+            document.getElementById("hiddenInput").value =
+              company_items[selectedOption][0];
+          });
         });
-      });
-    </script>
+      </script>
+      <style>
+        .short-dropdown {
+          width: 20%;
+        }
+      </style>
 
-    <select
-      id="weekdays"
-      class="form-select mb-1 short-dropdown"
-      aria-label="Default select example"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
-      <option selected value="0">選擇星期</option>
-      <option value="1">星期一</option>
-      <option value="2">星期二</option>
-      <option value="3">星期三</option>
-      <option value="4">星期四</option>
-      <option value="5">星期五</option>
-      <option value="6">星期六</option>
-      <option value="7">寄貨</option>
-    </select>
+      <!-- <p id="myText"></p> -->
 
-    <select
-      id="secondDropdown"
-      class="form-select mb-1 short-dropdown"
-      aria-label="form"
-      name="customer_name"
-    >
-      <!-- Options will be added here dynamically -->
-    </select>
+      <style>
+        .vertical-align {
+          display: inline-block;
+          font-size: 20px;
+          width: 1000px;
+          height: 20px;
+        }
+      </style>
+      <div class="vertical-align" id="myText"></div>
 
-    <script>
-      const company_items = {
-        華達士: ["1.5V,4V", 155, 400],
-        弘揚: ["V,苔,A,芝", 400, 400, 375, 375],
-        三乃: ["1.5V,大排,2A,2A苔", 155, 165, 160, 170],
-        超品: ["V,2A,排,豆,起(12)", 400, 165, 175, 85, 255],
-        新城: ["V", 450],
-        美琳: ["排,牛排", 175, 225],
-        洲河: ["V", 420],
-        山河: ["V", 420],
-        龍河: ["V", 420],
-        神河: ["V", 420],
-        鼎香: ["V", 450],
-        亞美橋山: ["V,排,培,哈", 440, 90, 235, 240],
-        楊溢: ["V,排,培,哈", 440, 90, 235, 240],
-        和達人五: ["V,小排,培,哈,起", 420, 90, 235, 240, 260],
-        汀州路五: ["V,小排,培,哈,起", 420, 90, 235, 240, 260],
-        瑞安街五: ["V,小排,培,起", 420, 90, 235, 260],
-        和達人二: ["V,小排,培,哈,起", 420, 90, 255, 240, 260],
-        汀州路二: ["V,小排,培,哈,起", 420, 90, 255, 240, 260],
-        瑞安街二: ["V,小排,培,起", 420, 90, 255, 260],
-        來可: ["V", 450],
-        桃鶯: ["V(箱),豆", 2700, 90],
-        春日: ["V(箱),豆", 2700, 90],
-        大興: ["V(箱),豆", 2700, 90],
-        筱芸南平: ["V", 450],
-        北大昇輝: ["V,豆", 450, 90],
-        昇輝寶慶: ["V,豆", 450, 90],
-        桃園寶慶: ["V,豆", 480, 90],
-        百成一店: ["V(箱),豆", 2700, 90],
-        北聖: ["V,豆", 450, 90],
-        筱芸中正: ["V", 450],
-        大園果林: ["V(箱),豆", 2700, 90],
-        云盛: ["V,排,培,哈", 450, 90, 245, 240],
-        北大文化二路: ["V,豆", 450, 90],
-        林口仁愛: ["V,豆", 450, 90],
-        北大文化三路: ["V,豆", 450, 90],
-        龍鳳: ["5V,排,4V", 500, 175, 400],
-        深溪: ["V,豆", 450, 90],
-        仁樂: ["V,豆", 450, 90],
-        珍好味: ["V,豆", 450, 90],
-        新豐: ["V,豆", 450, 90],
-        福德: ["V,豆", 450, 90],
-        筱芸中壢: ["V", 450],
-      };
-      $(document).ready(function () {
-        $("#secondDropdown").change(function () {
-          var selectedOption = $(this).val();
-          console.log("Selected option: " + selectedOption);
+      <input type="hidden" id="hiddenInput" name="order_items" />
 
-          // Find the maximum length among all arrays
-          let maxLength = 0;
-          for (let key in company_items) {
-            if (company_items[key].length > maxLength) {
-              maxLength = company_items[key].length;
-            }
-          }
+      <input
+        class="form-control me-2"
+        type="date"
+        placeholder="日期"
+        value=""
+        aria-label="form"
+        name="order_date"
+      />
+      <button class="btn btn-outline-success" type="submit">Cal</button>
+    </form>
+  </div>
+</head>
 
-          $("#myText").text(company_items[selectedOption][0]);
-          document.getElementById("hiddenInput").value =
-            company_items[selectedOption][0];
-        });
-      });
-    </script>
-    <style>
-      .short-dropdown {
-        width: 20%;
-      }
-    </style>
+<body>
+  <div class="content">
+    {%if summaries == []%}
+    <h1 style="text-align: center">輸入計算資訊</h1>
+    {%endif%} {% for summary in summaries %}
+    <table class="table table-hover table-dark">
+      <thead>
+        <tr>
+          <th>#id</th>
+          <th>貨名</th>
+          <th>數量</th>
+          <th>單價</th>
+          <th>價格</th>
+        </tr>
+      </thead>
+      {% for detail in summary %}
+      <tbody>
+        <tr>
+          <td>{{ detail.id }}</td>
+          <td>{{ detail.item }}</td>
+          <td>{{ detail.num }}</td>
+          <td>{{ detail.price }}</td>
+          <td>{{ detail.cur_sum }}</td>
+        </tr>
+      </tbody>
 
-    <!-- <p id="myText"></p> -->
-
-    <style>
-      .vertical-align {
-        display: inline-block;
-        font-size: 20px;
-        width: 1000px;
-        height: 20px;
-      }
-    </style>
-    <div class="vertical-align" id="myText"></div>
-
-    <input type="hidden" id="hiddenInput" name="order_items" />
-
-    <input
-      class="form-control me-2"
-      type="date"
-      placeholder="日期"
-      value=""
-      aria-label="form"
-      name="order_date"
-    />
-    <button class="btn btn-outline-success" type="submit">Cal</button>
-  </form>
-</div>
-
-<div class="content">
-  <h2>{{ orders }}</h2>
-  <table class="table table-hover table-dark">
-    <thead>
-      <tr>
-        <th>買家</th>
-        <th>品項</th>
-        <th>數量</th>
-        <th>日期</th>
-      </tr>
-    </thead>
-
-    {% for order in orders %}
-    <tbody>
-      <tr>
-        <td>{{ order.customer }}</td>
-        <td>{{ order.item }}</td>
-        <td>{{ order.num_item }}</td>
-        <td>{{ order.date }}</td>
-
-        <td colspan="4">
-          <table class="table mb-0">
-            <a href="/update/{{order.id}}" class="btn btn-outline-warning"
-              >Update</a
-            >
-            <a href="/delete/{{order.id}}" class="btn btn-outline-danger"
-              >Delete</a
-            >
-          </table>
-        </td>
-      </tr>
-    </tbody>
+      {% endfor %}
+    </table>
     {% endfor %}
-  </table>
-</div>
-{% endblock %}
-<script>
-  $(document).ready(function () {
-    $("form").submit(function (event) {
-      event.preventDefault(); // prevent the form from submitting normally
+  </div>
+  <!-- 
+  <div class="content">
+    <table class="table table-hover table-dark">
+      <thead>
+        <tr>
+          <th>買家</th>
+          <th>品項</th>
+          <th>數量</th>
+          <th>日期</th>
+        </tr>
+      </thead>
 
-      // get the form data
-      var formData = {
-        customer_name: $("select[name=customer_name]").val(),
-        order_items: $("input[name=order_items]").val(),
-        order_date: $("input[name=order_date]").val(),
-      };
+      {% for order in orders %}
+      <tbody>
+        <tr>
+          <td>{{ order.customer }}</td>
+          <td>{{ order.item }}</td>
+          <td>{{ order.num_item }}</td>
+          <td>{{ order.date }}</td>
 
-      // send the POST request
-      $.ajax({
-        type: "POST",
-        url: "/bill_summary.html",
-        data: formData,
-        success: function (response) {
-          // handle the response from the server
-          console.log(response);
-        },
-        error: function (xhr, status, error) {
-          // handle errors
-          console.log(xhr.responseText);
-        },
+          <td colspan="4">
+            <table class="table mb-0">
+              <a href="/update/{{order.id}}" class="btn btn-outline-warning"
+                >Update</a
+              >
+              <a href="/delete/{{order.id}}" class="btn btn-outline-danger"
+                >Delete</a
+              >
+            </table>
+          </td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+  </div>
+   -->
+  {% endblock %}
+  <script>
+    $(document).ready(function () {
+      $("form").submit(function (event) {
+        event.preventDefault(); // prevent the form from submitting normally
+
+        // get the form data
+        var formData = {
+          customer_name: $("select[name=customer_name]").val(),
+          order_items: $("input[name=order_items]").val(),
+          order_date: $("input[name=order_date]").val(),
+        };
+
+        // send the POST request
+        $.ajax({
+          type: "POST",
+          url: "/bill_summary.html",
+          data: formData,
+          success: function (response) {
+            // handle the response from the server
+            console.log(response);
+          },
+          error: function (xhr, status, error) {
+            // handle errors
+            console.log(xhr.responseText);
+          },
+        });
       });
     });
-  });
-</script>
+  </script>
+</body>

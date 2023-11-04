@@ -8,19 +8,19 @@ from order.services import *
 @app.route('/bill_summary', methods=['GET', 'POST'])
 def bill_summary():
     # session['previous_page'] = request.referrer
-    
+    summaries = []
     if request.method == 'POST':
         customer = request.form['customer_name']
         items = request.form['order_items']
         date = request.form['order_date']
         orders = Order.query.filter( Order.customer.icontains(customer) & Order.date.icontains(date)).order_by(Order.date).all()
 
-        summary = bill_overview(orders)
+        summaries = bill_overview(orders)
         print(orders)
     else:
         orders = Order.query.order_by(Order.date).all()
     
-    return render_template('bill_summary.html', orders = orders)    
+    return render_template('bill_summary.html', orders = orders, summaries = summaries)    
 
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -85,8 +85,8 @@ def delete(id):
     try:
         db.session.delete(order_to_delete)
         db.session.commit()
-        previous_page = session.get('previous_page', '/')
-        return redirect(previous_page)
+        # previous_page = session.get('previous_page', '/')
+        return redirect(request.referrer)
     except:
         return 'There was a problem deleting that order'
 
