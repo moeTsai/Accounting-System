@@ -1,6 +1,6 @@
 # Accouting-System
 
-This is an accouting system for a meat floss shop.
+This is an accouting system for a pork floss shop.
 
 # from the directory
 
