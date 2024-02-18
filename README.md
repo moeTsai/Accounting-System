@@ -1,4 +1,4 @@
-# Accouting-System
+# Accounting-System
 
 This is an accouting system for a pork floss shop.
 
